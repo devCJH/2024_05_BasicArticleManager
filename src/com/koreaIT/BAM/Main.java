@@ -30,6 +30,7 @@ public class Main {
 			
 			if (cmd.equals("article write")) {
 				
+				System.out.println("== article write ==");
 				System.out.printf("제목 : ");
 				String title = sc.nextLine();
 				System.out.printf("내용 : ");
@@ -48,6 +49,7 @@ public class Main {
 					continue;
 				}
 				
+				System.out.println("== article list ==");
 				System.out.println("번호	|	제목");
 				for (int i = articles.size() - 1; i >= 0; i--) {
 					Article article = articles.get(i);
@@ -57,9 +59,34 @@ public class Main {
 			} else if (cmd.startsWith("article detail ")) {
 				
 				String[] cmdBits = cmd.split(" ");
-				int id = Integer.parseInt(cmdBits[2]);
 				
-//				System.out.println("1번 게시물은 존재하지 않습니다");
+				int id = -1;
+				
+				try {
+					id = Integer.parseInt(cmdBits[2]);
+				} catch (NumberFormatException e) {
+					System.out.println("잘못된 명령어입니다");
+					continue;
+				}
+				
+				Article foundArticle = null;
+				
+				for (Article article : articles) {
+					if (article.id == id) {
+						foundArticle = article;
+						break;
+					}
+				}
+				
+				if (foundArticle == null) {
+					System.out.printf("%d번 게시물은 존재하지 않습니다\n", id);
+					continue;
+				}
+				
+				System.out.println("== article detail ==");
+				System.out.printf("번호 : %d\n", foundArticle.id);
+				System.out.printf("제목 : %s\n", foundArticle.title);
+				System.out.printf("내용 : %s\n", foundArticle.body);
 				
 			} else {
 				System.out.println("존재하지 않는 명령어입니다");
