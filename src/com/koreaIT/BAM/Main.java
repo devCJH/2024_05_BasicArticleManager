@@ -10,7 +10,7 @@ public class Main {
 		
 		Scanner sc = new Scanner(System.in);
 		
-		int id = 0;
+		int lastArticleId = 0;
 		
 		List<Article> articles = new ArrayList<>();
 		
@@ -34,13 +34,13 @@ public class Main {
 				String title = sc.nextLine();
 				System.out.printf("내용 : ");
 				String body = sc.nextLine();
-				id++;
+				lastArticleId++;
 
-				Article article = new Article(id, title, body);
+				Article article = new Article(lastArticleId, title, body);
 				
 				articles.add(article);
 				
-				System.out.printf("%d번 글이 생성되었습니다\n", id);
+				System.out.printf("%d번 글이 생성되었습니다\n", lastArticleId);
 				
 			} else if (cmd.equals("article list")) {
 				if (articles.size() == 0) {
@@ -53,6 +53,13 @@ public class Main {
 					Article article = articles.get(i);
 					System.out.printf("%d	|	%s\n", article.id, article.title);
 				}
+				
+			} else if (cmd.startsWith("article detail ")) {
+				
+				String[] cmdBits = cmd.split(" ");
+				int id = Integer.parseInt(cmdBits[2]);
+				
+//				System.out.println("1번 게시물은 존재하지 않습니다");
 				
 			} else {
 				System.out.println("존재하지 않는 명령어입니다");
