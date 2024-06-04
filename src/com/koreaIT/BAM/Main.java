@@ -8,14 +8,21 @@ import com.koreaIT.BAM.dto.Article;
 import com.koreaIT.BAM.util.Util;
 
 public class Main {
+	
+	static int lastArticleId;
+	static List<Article> articles;
+	
+	static {
+		lastArticleId = 0;
+		articles = new ArrayList<>();
+	}
+	
 	public static void main(String[] args) {
 		System.out.println("== 프로그램 시작 ==");
 		
 		Scanner sc = new Scanner(System.in);
 		
-		int lastArticleId = 0;
-		
-		List<Article> articles = new ArrayList<>();
+		makeTestData();
 		
 		while (true) {
 			
@@ -174,4 +181,20 @@ public class Main {
 		System.out.println("== 프로그램 끝 ==");
 		
 	}
+
+	private static void makeTestData() {
+		System.out.println("테스트용 게시물 데이터를 생성했습니다");
+		
+		for (int i = 1; i <= 5; i++) {
+			articles.add(new Article(++lastArticleId, Util.getDateStr(), Util.getDateStr(), "제목" + i, "내용" + i));
+		}
+	}
 }
+
+
+
+
+
+
+
+
