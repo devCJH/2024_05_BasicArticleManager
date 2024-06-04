@@ -5,16 +5,21 @@ import java.util.List;
 import java.util.Scanner;
 
 import com.koreaIT.BAM.dto.Article;
+import com.koreaIT.BAM.dto.Member;
 import com.koreaIT.BAM.util.Util;
 
 public class Main {
 	
 	static int lastArticleId;
+	static int lastMemberId;
 	static List<Article> articles;
+	static List<Member> members;
 	
 	static {
 		lastArticleId = 0;
+		lastMemberId = 0;
 		articles = new ArrayList<>();
+		members = new ArrayList<>();
 	}
 	
 	public static void main(String[] args) {
@@ -25,7 +30,6 @@ public class Main {
 		makeTestData();
 		
 		while (true) {
-			
 			System.out.printf("명령어) ");
 			String cmd = sc.nextLine().trim();
 			
@@ -38,7 +42,39 @@ public class Main {
 				continue;
 			}
 			
-			if (cmd.equals("article write")) {
+			if (cmd.equals("member join")) {
+				
+				String loginPw = null;
+				
+				System.out.println("== member join ==");
+				System.out.printf("아이디 : ");
+				String loginId = sc.nextLine();
+				
+				while (true) {
+					System.out.printf("비밀번호 : ");
+					loginPw = sc.nextLine();
+					System.out.printf("비밀번호 확인 : ");
+					String loginPwChk = sc.nextLine();
+					
+					if (loginPw.equals(loginPwChk) == false) {
+						System.out.println("비밀번호가 일치하지 않습니다");
+						continue;
+					}
+					
+					break;
+				}
+				
+				System.out.printf("이름 : ");
+				String name = sc.nextLine();
+				lastMemberId++;
+				
+				Member member = new Member(lastMemberId, Util.getDateStr(), Util.getDateStr(), loginId, loginPw, name);
+				
+				members.add(member);
+				
+				System.out.printf("[ %s ] 회원님이 가입되었습니다.\n", loginId);
+				
+			} else if (cmd.equals("article write")) {
 				
 				System.out.println("== article write ==");
 				System.out.printf("제목 : ");
