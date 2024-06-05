@@ -58,16 +58,7 @@ public class App {
 						continue;
 					}
 					
-					boolean isLoginIdDup = false;
-					
-					for (Member member : members) {
-						if (member.getLoginId().equals(loginId)) {
-							isLoginIdDup = true;
-							break;
-						}
-					}
-					
-					if (isLoginIdDup == true) {
+					if (isLoginIdDup(loginId)) {
 						System.out.printf("[ %s ]은(는) 이미 사용중인 아이디입니다\n", loginId);
 						continue;
 					}
@@ -271,17 +262,12 @@ public class App {
 			return -1;
 		}
 	}
+	private boolean isLoginIdDup(String loginId) {
+		for (Member member : members) {
+			if (member.getLoginId().equals(loginId)) {
+				return true;
+			}
+		}
+		return false;
+	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
