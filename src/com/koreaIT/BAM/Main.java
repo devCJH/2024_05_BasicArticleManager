@@ -45,27 +45,66 @@ public class Main {
 			if (cmd.equals("member join")) {
 				
 				String loginPw = null;
+				String loginId = null;
+				String name = null;
 				
 				System.out.println("== member join ==");
-				System.out.printf("아이디 : ");
-				String loginId = sc.nextLine();
+				while (true) {
+					System.out.printf("아이디 : ");
+					loginId = sc.nextLine().trim();
+					
+					if (loginId.length() == 0) {
+						System.out.println("아이디를 입력해주세요");
+						continue;
+					}
+					
+					boolean isLoginIdDup = false;
+					
+					for (Member member : members) {
+						if (member.getLoginId().equals(loginId)) {
+							isLoginIdDup = true;
+							break;
+						}
+					}
+					
+					if (isLoginIdDup == true) {
+						System.out.printf("[ %s ]은(는) 이미 사용중인 아이디입니다\n", loginId);
+						continue;
+					}
+					
+					System.out.printf("[ %s ]은(는) 사용가능한 아이디입니다\n", loginId);
+					break;
+				}
 				
 				while (true) {
 					System.out.printf("비밀번호 : ");
-					loginPw = sc.nextLine();
+					loginPw = sc.nextLine().trim();
+					
+					if (loginPw.length() == 0) {
+						System.out.println("비밀번호를 입력해주세요");
+						continue;
+					}
+					
 					System.out.printf("비밀번호 확인 : ");
-					String loginPwChk = sc.nextLine();
+					String loginPwChk = sc.nextLine().trim();
 					
 					if (loginPw.equals(loginPwChk) == false) {
 						System.out.println("비밀번호가 일치하지 않습니다");
 						continue;
 					}
-					
 					break;
 				}
 				
-				System.out.printf("이름 : ");
-				String name = sc.nextLine();
+				while (true) {
+					System.out.printf("이름 : ");
+					name = sc.nextLine().trim();
+					
+					if (name.length() == 0) {
+						System.out.println("이름을 입력해주세요");
+						continue;
+					}
+					break;
+				}
 				lastMemberId++;
 				
 				Member member = new Member(lastMemberId, Util.getDateStr(), Util.getDateStr(), loginId, loginPw, name);
