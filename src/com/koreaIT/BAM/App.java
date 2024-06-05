@@ -28,8 +28,11 @@ public class App {
 		Scanner sc = new Scanner(System.in);
 		
 		makeTestData();
+
+		Member loginedMember = null;
 		
 		while (true) {
+			
 			System.out.printf("명령어) ");
 			String cmd = sc.nextLine().trim();
 			
@@ -43,6 +46,11 @@ public class App {
 			}
 			
 			if (cmd.equals("member join")) {
+				
+				if (loginedMember != null) {
+					System.out.println("로그아웃 후 이용해주세요");
+					continue;
+				}
 				
 				String loginPw = null;
 				String loginId = null;
@@ -103,6 +111,52 @@ public class App {
 				members.add(member);
 				
 				System.out.printf("[ %s ] 회원님이 가입되었습니다.\n", loginId);
+				
+			} else if (cmd.equals("member login")) {
+				
+				if (loginedMember != null) {
+					System.out.println("로그아웃 후 이용해주세요");
+					continue;
+				}
+				
+				System.out.println("== member login ==");
+				System.out.printf("아이디 : ");
+				String loginId = sc.nextLine();
+				System.out.printf("비밀번호 : ");
+				String loginPw = sc.nextLine();
+				
+				Member member = null;
+				
+				for (Member m : members) {
+					if (m.getLoginId().equals(loginId)) {
+						member = m;
+						break;
+					}
+				}
+				
+				if (member == null) {
+					System.out.printf("[ %s ]은(는) 존재하지 않는 아이디입니다\n", loginId);
+					continue;
+				}
+				
+				if (member.getLoginPw().equals(loginPw) == false) {
+					System.out.println("비밀번호를 확인해주세요");
+					continue;
+				}
+				
+				loginedMember = member;
+				
+				System.out.printf("[ %s ] 님 환영합니다~\n", member.getName());
+				
+			} else if (cmd.equals("member logout")) {
+				
+				if (loginedMember == null) {
+					System.out.println("로그인 후 이용해주세요");
+					continue;
+				}
+
+				loginedMember = null;
+				System.out.println("로그아웃 되었습니다");
 				
 			} else if (cmd.equals("article write")) {
 				
