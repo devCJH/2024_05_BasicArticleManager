@@ -165,25 +165,14 @@ public class App {
 				
 			} else if (cmd.startsWith("article detail ")) {
 				
-				String[] cmdBits = cmd.split(" ");
+				int id = getCmdNum(cmd);
 				
-				int id = -1;
-				
-				try {
-					id = Integer.parseInt(cmdBits[2]);
-				} catch (NumberFormatException e) {
+				if (id == -1) {
 					System.out.println("잘못된 명령어입니다");
 					continue;
 				}
 				
-				Article foundArticle = null;
-				
-				for (Article article : articles) {
-					if (article.getId() == id) {
-						foundArticle = article;
-						break;
-					}
-				}
+				Article foundArticle = getArticleById(id);
 				
 				if (foundArticle == null) {
 					System.out.printf("%d번 게시물은 존재하지 않습니다\n", id);
@@ -199,25 +188,14 @@ public class App {
 				
 			} else if (cmd.startsWith("article modify ")) {
 				
-				String[] cmdBits = cmd.split(" ");
+				int id = getCmdNum(cmd);
 				
-				int id = -1;
-				
-				try {
-					id = Integer.parseInt(cmdBits[2]);
-				} catch (NumberFormatException e) {
+				if (id == -1) {
 					System.out.println("잘못된 명령어입니다");
 					continue;
 				}
 				
-				Article foundArticle = null;
-				
-				for (Article article : articles) {
-					if (article.getId() == id) {
-						foundArticle = article;
-						break;
-					}
-				}
+				Article foundArticle = getArticleById(id);
 				
 				if (foundArticle == null) {
 					System.out.printf("%d번 게시물은 존재하지 않습니다\n", id);
@@ -238,25 +216,14 @@ public class App {
 				
 			} else if (cmd.startsWith("article delete ")) {
 				
-				String[] cmdBits = cmd.split(" ");
+				int id = getCmdNum(cmd);
 				
-				int id = -1;
-				
-				try {
-					id = Integer.parseInt(cmdBits[2]);
-				} catch (NumberFormatException e) {
+				if (id == -1) {
 					System.out.println("잘못된 명령어입니다");
 					continue;
 				}
 				
-				Article foundArticle = null;
-				
-				for (Article article : articles) {
-					if (article.getId() == id) {
-						foundArticle = article;
-						break;
-					}
-				}
+				Article foundArticle = getArticleById(id);
 				
 				if (foundArticle == null) {
 					System.out.printf("%d번 게시물은 존재하지 않습니다\n", id);
@@ -277,7 +244,6 @@ public class App {
 		
 		System.out.println("== 프로그램 끝 ==");
 	}
-	
 	private void makeTestData() {
 		System.out.println("테스트용 게시물 데이터를 생성했습니다");
 		
@@ -285,4 +251,37 @@ public class App {
 			articles.add(new Article(++lastArticleId, Util.getDateStr(), Util.getDateStr(), "제목" + i, "내용" + i));
 		}
 	}
+	private Article getArticleById(int id) {
+		for (Article article : articles) {
+			if (article.getId() == id) {
+				return article;
+			}
+		}
+		return null;
+	}
+	private int getCmdNum(String cmd) {
+		String[] cmdBits = cmd.split(" ");
+		
+		int id = -1;
+		
+		try {
+			id = Integer.parseInt(cmdBits[2]);
+			return id;
+		} catch (NumberFormatException e) {
+			return -1;
+		}
+	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
