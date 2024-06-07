@@ -160,6 +160,11 @@ public class App {
 				
 			} else if (cmd.equals("article write")) {
 				
+				if (loginedMember == null) {
+					System.out.println("로그인 후 이용해주세요");
+					continue;
+				}
+				
 				System.out.println("== article write ==");
 				System.out.printf("제목 : ");
 				String title = sc.nextLine();
@@ -167,7 +172,7 @@ public class App {
 				String body = sc.nextLine();
 				lastArticleId++;
 				
-				Article article = new Article(lastArticleId, Util.getDateStr(), Util.getDateStr(), title, body);
+				Article article = new Article(lastArticleId, Util.getDateStr(), Util.getDateStr(), loginedMember.getId(), title, body);
 				
 				articles.add(article);
 				
@@ -202,10 +207,20 @@ public class App {
 				}
 				
 				System.out.println("== article list ==");
-				System.out.println("번호	|	제목	|	작성일	");
+				System.out.println("번호	|	제목	|	작성일			|	작성자	");
 				for (int i = printArticles.size() - 1; i >= 0; i--) {
 					Article article = printArticles.get(i);
-					System.out.printf("%d	|	%s	|%s\n", article.getId(), article.getTitle(), article.getUpdateDate());
+					
+					String writerName = null;
+					
+					for (Member member : members) {
+						if (member.getId() == article.getMemberId()) {
+							writerName = member.getLoginId();
+							break;
+						}
+					}
+					
+					System.out.printf("%d	|	%s	|	%s	|	%s	\n", article.getId(), article.getTitle(), article.getUpdateDate(), writerName);
 				}
 				
 			} else if (cmd.startsWith("article detail ")) {
@@ -224,10 +239,20 @@ public class App {
 					continue;
 				}
 				
+				String writerName = null;
+				
+				for (Member member : members) {
+					if (member.getId() == foundArticle.getMemberId()) {
+						writerName = member.getLoginId();
+						break;
+					}
+				}
+				
 				System.out.println("== article detail ==");
 				System.out.printf("번호 : %d\n", foundArticle.getId());
 				System.out.printf("작성일 : %s\n", foundArticle.getRegDate());
 				System.out.printf("수정일 : %s\n", foundArticle.getUpdateDate());
+				System.out.printf("작성자 : %s\n", writerName);
 				System.out.printf("제목 : %s\n", foundArticle.getTitle());
 				System.out.printf("내용 : %s\n", foundArticle.getBody());
 				
@@ -293,7 +318,7 @@ public class App {
 		System.out.println("테스트용 게시물 데이터를 생성했습니다");
 		
 		for (int i = 1; i <= 5; i++) {
-			articles.add(new Article(++lastArticleId, Util.getDateStr(), Util.getDateStr(), "제목" + i, "내용" + i));
+			articles.add(new Article(++lastArticleId, Util.getDateStr(), Util.getDateStr(), 1, "제목" + i, "내용" + i));
 		}
 	}
 	private Article getArticleById(int id) {
