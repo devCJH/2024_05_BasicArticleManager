@@ -244,6 +244,11 @@ public class App {
 				
 			} else if (cmd.startsWith("article modify ")) {
 				
+				if (loginedMember == null) {
+					System.out.println("로그인 후 이용해주세요");
+					continue;
+				}
+				
 				int id = getCmdNum(cmd);
 				
 				if (id == -1) {
@@ -255,6 +260,11 @@ public class App {
 				
 				if (foundArticle == null) {
 					System.out.printf("%d번 게시물은 존재하지 않습니다\n", id);
+					continue;
+				}
+				
+				if (foundArticle.getMemberId() != loginedMember.getId()) {
+					System.out.println("해당 게시물에 대한 권한이 없습니다");
 					continue;
 				}
 				
@@ -272,6 +282,11 @@ public class App {
 				
 			} else if (cmd.startsWith("article delete ")) {
 				
+				if (loginedMember == null) {
+					System.out.println("로그인 후 이용해주세요");
+					continue;
+				}
+				
 				int id = getCmdNum(cmd);
 				
 				if (id == -1) {
@@ -283,6 +298,11 @@ public class App {
 				
 				if (foundArticle == null) {
 					System.out.printf("%d번 게시물은 존재하지 않습니다\n", id);
+					continue;
+				}
+
+				if (foundArticle.getMemberId() != loginedMember.getId()) {
+					System.out.println("해당 게시물에 대한 권한이 없습니다");
 					continue;
 				}
 				
