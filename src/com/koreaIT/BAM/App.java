@@ -211,14 +211,7 @@ public class App {
 				for (int i = printArticles.size() - 1; i >= 0; i--) {
 					Article article = printArticles.get(i);
 					
-					String writerName = null;
-					
-					for (Member member : members) {
-						if (member.getId() == article.getMemberId()) {
-							writerName = member.getLoginId();
-							break;
-						}
-					}
+					String writerName = getWriterNameById(article.getMemberId());
 					
 					System.out.printf("%d	|	%s	|	%s	|	%s	\n", article.getId(), article.getTitle(), article.getUpdateDate(), writerName);
 				}
@@ -239,14 +232,7 @@ public class App {
 					continue;
 				}
 				
-				String writerName = null;
-				
-				for (Member member : members) {
-					if (member.getId() == foundArticle.getMemberId()) {
-						writerName = member.getLoginId();
-						break;
-					}
-				}
+				String writerName = getWriterNameById(foundArticle.getMemberId());
 				
 				System.out.println("== article detail ==");
 				System.out.printf("번호 : %d\n", foundArticle.getId());
@@ -316,10 +302,13 @@ public class App {
 	}
 	private void makeTestData() {
 		System.out.println("테스트용 게시물 데이터를 생성했습니다");
+		System.out.println("테스트용 회원 데이터를 생성했습니다");
 		
-		for (int i = 1; i <= 5; i++) {
-			articles.add(new Article(++lastArticleId, Util.getDateStr(), Util.getDateStr(), 1, "제목" + i, "내용" + i));
+		for (int i = 1; i <= 3; i++) {
+			members.add(new Member(++lastMemberId, Util.getDateStr(), Util.getDateStr(), "user" + i, "user" + i, "user" + i));
+			articles.add(new Article(++lastArticleId, Util.getDateStr(), Util.getDateStr(), (int) (Math.random() * 3) + 1, "제목" + i, "내용" + i));
 		}
+		
 	}
 	private Article getArticleById(int id) {
 		for (Article article : articles) {
@@ -348,5 +337,13 @@ public class App {
 			}
 		}
 		return false;
+	}
+	private String getWriterNameById(int memberId) {
+		for (Member member : members) {
+			if (member.getId() == memberId) {
+				return member.getLoginId();
+			}
+		}
+		return null;
 	}
 }
