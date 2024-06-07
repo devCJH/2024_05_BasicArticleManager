@@ -4,21 +4,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import com.koreaIT.BAM.controller.MemberController;
 import com.koreaIT.BAM.dto.Article;
 import com.koreaIT.BAM.dto.Member;
 import com.koreaIT.BAM.util.Util;
 
 public class App {
 	private int lastArticleId;
-	private int lastMemberId;
 	private List<Article> articles;
-	private List<Member> members;
 	
 	public App() {
 		this.lastArticleId = 0;
-		this.lastMemberId = 0;
 		this.articles = new ArrayList<>();
-		this.members = new ArrayList<>();
 	}
 	
 	public void run() {
@@ -27,10 +24,10 @@ public class App {
 		
 		Scanner sc = new Scanner(System.in);
 		
+		MemberController memberController = new MemberController(sc);
+		
 		makeTestData();
 
-		Member loginedMember = null;
-		
 		while (true) {
 			
 			System.out.printf("명령어) ");
@@ -46,118 +43,11 @@ public class App {
 			}
 			
 			if (cmd.equals("member join")) {
-				
-				if (loginedMember != null) {
-					System.out.println("로그아웃 후 이용해주세요");
-					continue;
-				}
-				
-				String loginPw = null;
-				String loginId = null;
-				String name = null;
-				
-				System.out.println("== member join ==");
-				while (true) {
-					System.out.printf("아이디 : ");
-					loginId = sc.nextLine().trim();
-					
-					if (loginId.length() == 0) {
-						System.out.println("아이디를 입력해주세요");
-						continue;
-					}
-					
-					if (isLoginIdDup(loginId)) {
-						System.out.printf("[ %s ]은(는) 이미 사용중인 아이디입니다\n", loginId);
-						continue;
-					}
-					
-					System.out.printf("[ %s ]은(는) 사용가능한 아이디입니다\n", loginId);
-					break;
-				}
-				
-				while (true) {
-					System.out.printf("비밀번호 : ");
-					loginPw = sc.nextLine().trim();
-					
-					if (loginPw.length() == 0) {
-						System.out.println("비밀번호를 입력해주세요");
-						continue;
-					}
-					
-					System.out.printf("비밀번호 확인 : ");
-					String loginPwChk = sc.nextLine().trim();
-					
-					if (loginPw.equals(loginPwChk) == false) {
-						System.out.println("비밀번호가 일치하지 않습니다");
-						continue;
-					}
-					break;
-				}
-				
-				while (true) {
-					System.out.printf("이름 : ");
-					name = sc.nextLine().trim();
-					
-					if (name.length() == 0) {
-						System.out.println("이름을 입력해주세요");
-						continue;
-					}
-					break;
-				}
-				lastMemberId++;
-				
-				Member member = new Member(lastMemberId, Util.getDateStr(), Util.getDateStr(), loginId, loginPw, name);
-				
-				members.add(member);
-				
-				System.out.printf("[ %s ] 회원님이 가입되었습니다.\n", loginId);
-				
+				memberController.doJoin();
 			} else if (cmd.equals("member login")) {
-				
-				if (loginedMember != null) {
-					System.out.println("로그아웃 후 이용해주세요");
-					continue;
-				}
-				
-				System.out.println("== member login ==");
-				System.out.printf("아이디 : ");
-				String loginId = sc.nextLine();
-				System.out.printf("비밀번호 : ");
-				String loginPw = sc.nextLine();
-				
-				Member member = null;
-				
-				for (Member m : members) {
-					if (m.getLoginId().equals(loginId)) {
-						member = m;
-						break;
-					}
-				}
-				
-				if (member == null) {
-					System.out.printf("[ %s ]은(는) 존재하지 않는 아이디입니다\n", loginId);
-					continue;
-				}
-				
-				if (member.getLoginPw().equals(loginPw) == false) {
-					System.out.println("비밀번호를 확인해주세요");
-					continue;
-				}
-				
-				loginedMember = member;
-				
-				System.out.printf("[ %s ] 님 환영합니다~\n", member.getName());
-				
+				memberController.doLogin();
 			} else if (cmd.equals("member logout")) {
-				
-				if (loginedMember == null) {
-					System.out.println("로그인 후 이용해주세요");
-					continue;
-				}
-
-				loginedMember = null;
-				System.out.println("로그아웃 되었습니다");
-				
+				memberController.doLogout();
 			} else if (cmd.equals("article write")) {
 				
 				if (loginedMember == null) {
@@ -350,14 +240,7 @@ public class App {
 			return -1;
 		}
 	}
-	private boolean isLoginIdDup(String loginId) {
-		for (Member member : members) {
-			if (member.getLoginId().equals(loginId)) {
-				return true;
-			}
-		}
-		return false;
-	}
+	
 	private String getWriterNameById(int memberId) {
 		for (Member member : members) {
 			if (member.getId() == memberId) {
